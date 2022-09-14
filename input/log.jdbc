@@ -1,0 +1,6 @@
+{C:/Users/ito-yo/git C:/Users/ito-yo/git/repo/remix/esm_war C:/Users/log}
+{DBMS=POSTGRES jdbc.driver=org.postgresql.Driver jdbc.url=jdbc:postgresql://cust_esmsys-ap-linux:5432/cust_esm cust_esm cust_esm}
+{DBMS=POSTGRES jdbc.driver=org.postgresql.Driver jdbc.url=jdbc:postgresql://cust_esmsys-ap-linux:5432/cust_esm cust_esm_sub cust_esm_sub}
+{C:/Users/ito-yo/git C:/Users/ito-yo/git/repo/remix/esm_war C:/Users/log}
+{DBMS=SQLSERVER jdbc.driver=com.microsoft.sqlserver.jdbc.SQLServerDriver jdbc.url=jdbc:sqlserver://sys-ap-linux:1433 cust_esm cust_esm}
+{DBMS=SQLSERVER jdbc.driver=com.microsoft.sqlserver.jdbc.SQLServerDriver jdbc.url=jdbc:sqlserver://sys-ap-linux:1433 cust_esm_sub cust_esm_sub}

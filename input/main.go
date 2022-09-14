@@ -5,12 +5,29 @@ import (
 	"log"
 	"os"
 	"flag"
-	"time"
 	"bufio"
-
+	"regexp"
 )
 
 const targetPath = "a/b/c/d/e/target/"
+// main jdbc
+const pgDbms =  "DBMS=POSTGRES"
+const pgDriver = "jdbc.driver=org.postgresql.Driver"
+const pgUrl = "jdbc.url=jdbc:postgresql://"
+const sqlDbms = "DBMS=SQLSERVER"
+const sqlDriver = "jdbc.driver=com.microsoft.sqlserver.jdbc.SQLServerDriver"
+const sqlUrl = "jdbc.url=jdbc:sqlserver://"
+const jdbcName = "jdbc.username="
+const jdbcPass = "jdbc.password="
+// sub jdbc
+const subpgDbms =  "DBMS.sub=POSTGRES"
+const subpgDriver = "jdbc.sub.driver=org.postgresql.Driver"
+const subpgUrl = "jdbc.sub.url=jdbc:postgresql://"
+const subsqlDbms = "DBMS.sub=SQLSERVER"
+const subsqlDriver = "jdbc.sub.driver=com.microsoft.sqlserver.jdbc.SQLServerDriver"
+const subsqlUrl = "jdbc.sub.url=jdbc:sqlserver://"
+const subjdbcName = "jdbc.sub.username="
+const subjdbcPass = "jdbc.sub.password="
 
 type JdbcInfo struct {
 	Dbms		string
@@ -20,20 +37,49 @@ type JdbcInfo struct {
 	Password	string
 }
 
-func main() {
 
+func main() {
 // dbtype=
 // domain=
 // username=
 // password=
 // contextName=
-	examConfigFile()
+	strs := getValueFromConfig()
+	allInfo := createAllInfo(strs[5:], strs[:5])
 
+	file, err := os.Create("text.txt")
+	defer file.Close()
 
+	if err != nil {
+		log.Fatal(err)
+	}
+
+    _, err = file.WriteString(
+		allInfo.mainJdbc.Dbms +"\n"+
+		allInfo.mainJdbc.Driver+"\n"+
+		allInfo.mainJdbc.Domain+"\n"+
+		allInfo.mainJdbc.Username+"\n"+
+		allInfo.mainJdbc.Password+"\n"+
+		allInfo.subJdbc.Dbms +"\n"+
+		allInfo.subJdbc.Driver+"\n"+
+		allInfo.subJdbc.Domain+"\n"+
+		allInfo.subJdbc.Username+"\n"+
+		allInfo.subJdbc.Password+"\n")
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
-func examConfigFile() {
+func printAllInfoContents(allInfo AllInfo){
+	fmt.Println(allInfo.pathInfo)
+	fmt.Println(allInfo.mainJdbc)
+	fmt.Println(allInfo.subJdbc)
+}
+
+func getValueFromConfig() []string{
 	config, err := os.Open("test_config.properties")
+	var properties []string
+	regEqual := regexp.MustCompile(`=`)
 
 	if err != nil {
 		panic(err)
@@ -44,34 +90,114 @@ func examConfigFile() {
 
 	scanner := bufio.NewScanner(config)
 
-	for scanner.Scan() {
-		fmt.Println(scanner.Text())
-		fmt.Printf("%T", scanner.Text())
-		time.Sleep(time.Second * 1)
-	}
+	// for scanner.Scan() {
+	// 	scanner.Text()
+	// 	firstChar := ""
+	// 	if "#" == firstChar {
+	// 		continue
+	// 	}
+	// }
 
+	// 先頭１文字ががシャープ（コメント）かどうか確認
+	// propertyは、properties sliceに格納
+	for str := ""; scanner.Scan(); {
+		str = scanner.Text()
+		for _, c :=  range str{
+			if c == '#' {
+				break
+			} 
+			strSplited := regEqual.Split(str,-1)
+			properties = append(properties, strSplited[1])
+			break
+		}
+	}
+	return properties
 }
 
+// func setPropaties(dbType string, sub bool) JdbcInfo{
 
-func setPropaties(dbType string, sub bool) JdbcInfo{
+// 	args, dbType := commandLineArgs()
+// 	validateDbType(dbType)
+// 	if len(args) > 0 {
+// 		log.Fatal("\"-db=\"でDB種類を指定してください")
+// 	}
 
-	args, dbType := commandLineArgs()
-	validateDbType(dbType)
-	if len(args) > 0 {
-		log.Fatal("\"-db=\"でDB種類を指定してください")
+// 	strs := getValueFromConfig()
+// 	fmt.Println(strs)
+// 	pathInfo = strs[:5]
+// 	dbinfo = strs[5:]
+	// return jdbcInfo
+// }
+
+type PathInfo struct {
+	gitPath string
+	wesPath string
+	esm_log string
+}
+
+type AllInfo struct {
+	mainJdbc JdbcInfo
+	subJdbc JdbcInfo
+	pathInfo PathInfo
+}
+
+func createAllInfo(jdbcStr, pathStr []string) AllInfo{
+
+	var dbms string
+	var driver string
+	var url string 
+	var port string
+	dbName := "" 
+	
+	if dbtype := jdbcStr[0]; "pg" == dbtype {
+		dbms = pgDbms
+		driver = pgDriver
+		url = pgUrl+jdbcStr[2]+""
+		dbName = "/" + jdbcStr[2]
+		port = "5432"
+	} else if "sqlserver" == dbtype {
+		dbms = sqlDbms
+		driver = sqlDriver
+		url = sqlUrl
+		port = "1433" 
 	}
-
 
 	jdbcInfo := JdbcInfo{
-		// Dbms:
-		// Driver:
-		// Domain:
-		// Username:
-		// Password:
-		// 
+		Dbms: dbms,
+		Driver: driver,
+		Domain: url+jdbcStr[1]+":"+port+dbName, 
+		Username: jdbcName + jdbcStr[2],
+		Password: jdbcPass + jdbcStr[3],
 	}
 
-	return jdbcInfo
+	if dbtype := jdbcStr[0]; "pg" == dbtype {
+		dbms = subpgDbms
+		driver = subpgDriver
+		url = subpgUrl+jdbcStr[2]+""
+		dbName = "/" + jdbcStr[2]
+		port = "5432"
+	} else if "sqlserver" == dbtype {
+		dbms = subsqlDbms
+		driver = subsqlDriver
+		url = subsqlUrl
+		port = "1433" 
+	}
+
+	subJdbcInfo := JdbcInfo{
+		Dbms: dbms,
+		Driver: driver,
+		Domain: url+jdbcStr[1]+":"+port+dbName, 
+		Username: subjdbcName + jdbcStr[2]+"_sub",
+		Password: subjdbcPass + jdbcStr[3]+"_sub",
+	}
+
+	pathInfo := PathInfo{
+		gitPath:pathStr[0],
+		wesPath:pathStr[0] + "/repo" + "/remix/esm_war",
+		esm_log:pathStr[4],
+	}
+	allInfo := AllInfo{jdbcInfo, subJdbcInfo, pathInfo}
+	return allInfo
 }
 
 func validateAll() {
