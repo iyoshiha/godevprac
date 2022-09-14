@@ -1,7 +1,7 @@
 package main
 
 import(
-	"src/output/component"
+	"./component"
 )
 
 main() {

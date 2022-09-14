@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"flag"
+	"time"
 	"bufio"
 
 )
@@ -26,13 +27,13 @@ func main() {
 // username=
 // password=
 // contextName=
-
+	examConfigFile()
 
 
 }
 
 func examConfigFile() {
-	config, err =: os.Open(test_config.properties)
+	config, err := os.Open("test_config.properties")
 
 	if err != nil {
 		panic(err)
@@ -44,7 +45,9 @@ func examConfigFile() {
 	scanner := bufio.NewScanner(config)
 
 	for scanner.Scan() {
-		fmt.Println(scanner.Test())
+		fmt.Println(scanner.Text())
+		fmt.Printf("%T", scanner.Text())
+		time.Sleep(time.Second * 1)
 	}
 
 }
@@ -54,30 +57,29 @@ func setPropaties(dbType string, sub bool) JdbcInfo{
 
 	args, dbType := commandLineArgs()
 	validateDbType(dbType)
-	if args.size() > 0 {
-		log.fatal("\"-db=\"でDB種類を指定してください")
+	if len(args) > 0 {
+		log.Fatal("\"-db=\"でDB種類を指定してください")
 	}
 
-	os.Open()
 
-	jdbcInfo := {
-		Dbms:
-		Driver:
-		Domain:
-		Username:
-		Password:
-		
+	jdbcInfo := JdbcInfo{
+		// Dbms:
+		// Driver:
+		// Domain:
+		// Username:
+		// Password:
+		// 
 	}
 
-	return 
+	return jdbcInfo
 }
 
 func validateAll() {
 	// args validation
 	args, dbType := commandLineArgs()
 	validateDbType(dbType)
-	if args.size() > 0 {
-		log.fatal("\"-db=\"でDB種類を指定してください")
+	if len(args) > 0 {
+		log.Fatal("\"-db=\"でDB種類を指定してください")
 	}
 
 }
@@ -128,7 +130,7 @@ func commandLineArgs() (args []string, dbType string){
 	// これ以降フラグの設定など不可能
 	//　設定する場合、この行より上に書く
 	flag.Parse()
-	str := flag.Args()
+	args = flag.Args()
 
 	dbType = *f
 	fmt.Println("選択されたDBの種類:", dbType)
