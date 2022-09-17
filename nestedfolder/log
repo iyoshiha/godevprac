@@ -1,0 +1,5 @@
+total 8
+drwxr-xr-x 2 ito-yo ito-yo 4096 Sep 16 17:21 a
+-rw-r--r-- 1 ito-yo ito-yo    0 Sep 16 23:31 log
+-rw-r--r-- 1 ito-yo ito-yo  192 Sep 16 18:39 main.go
+---x--x--x 1 root   root      0 Sep 16 17:19 one
