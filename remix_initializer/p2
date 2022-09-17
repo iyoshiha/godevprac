@@ -1,0 +1,21 @@
+UID        PID  PPID  C STIME TTY          TIME CMD
+root         1     0  0 08:39 ?        00:00:00 /init
+root       131     1  0 08:39 ?        00:00:00 /init
+root       132   131  0 08:39 ?        00:00:00 /init
+root       133   132  0 08:39 pts/0    00:00:00 /mnt/wsl/docker-desktop/docker-desktop-user-distro proxy --distro-name Ubuntu --docker-desktop-root /mnt/wsl/docker-desktop
+root       146   131  0 08:39 ?        00:00:00 /init
+ito-yo     147   146  0 08:39 pts/1    00:00:00 docker serve --address unix:///home/ito-yo/.docker/run/docker-cli-api.sock
+root       161     1  0 08:40 ?        00:00:00 /init
+root       162   161  0 08:40 ?        00:00:00 /init
+ito-yo     163   162  0 08:40 pts/2    00:00:00 -bash
+ito-yo     391   162  0 09:13 ?        00:00:01 tmux new -s ss
+ito-yo     392   391  0 09:13 pts/3    00:00:00 -bash
+ito-yo     413   391  0 09:17 pts/4    00:00:00 -bash
+ito-yo     427   391  0 09:17 pts/5    00:00:00 -bash
+ito-yo     459   391  0 09:24 pts/6    00:00:00 -bash
+ito-yo     472   391  0 09:25 pts/7    00:00:00 -bash
+ito-yo     484   391  0 09:26 pts/8    00:00:00 -bash
+ito-yo     522   484  0 09:34 pts/8    00:00:00 vim processes
+ito-yo     526   391  0 09:41 pts/9    00:00:00 -bash
+ito-yo     540   163  0 09:42 pts/2    00:00:00 tmux a
+ito-yo     598   413  0 09:48 pts/4    00:00:00 ps -ef
