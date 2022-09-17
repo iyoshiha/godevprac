@@ -1,0 +1,38 @@
+UID        PID  PPID  C STIME TTY          TIME CMD
+root       162   161  0 08:40 ?        00:00:00 /init
+
+
+
+children
+ito-yo     163   162  0 08:40 pts/2    00:00:00 -bash
+ito-yo     391   162  0 09:13 ?        00:00:00 tmux new -s ss
+
+ito-yo     392   391  0 09:13 pts/3    00:00:00 -bash
+
+ito-yo     413   391  0 09:17 pts/4    00:00:00 -bash
+
+ito-yo     427   391  0 09:17 pts/5    00:00:00 -bash
+
+alksjdf;jasdlfjks;aldjfkl;asjdfkljalksdfj;lajsdfkl;jasl;kdfjl;kasjdfl;kjas;dfj;laksjdf;lkjasl;kdfjaskl;djfl;kasjdfkl;jaskl;dfjl;kasjdfkl;jas;lkdfja;lskdfjkl;asjf;klsjadfl;kjasdl;kfjas;lkdfjakl;sdjfl;kasdjfkl;sadjfl;kjsadlk;fjsadkl;fjlk;asjfl;kdsajfkjdsfl;jdslk;fjsdaklfj
+jasfdjlkasjdfl;kjasdf;klja;slk
+ajsdfkljsalkdfjklasjdfl;ka
+jaskldfjklasjdfl;aksjdfkjas
+jiajsdflkjasdf;ljask;lfdj
+
+
+ajsdfkljaskldfj;lakjsfd;ajsdf
+asjfkljdsa;fjk;lasjdf;lkjasd;klfja
+sfjdkl;sajf;klajsfd;kljsdf;klj
+ito-yo     452   163  0 09:22 pts/2    00:00:00 tmux a
+
+ito-yo     459   391  0 09:24 pts/6    00:00:00 -bash
+ito-kljsdfp
+hellofunc 
+
+hellofunca;lskjd
+ito-yo
+ito-yo     472   391  0 09:25 pts/7    00:00:00 -bash
+
+ito-yo     484   391  0 09:26 pts/8    00:00:00 -bash
+
+ito-yo     513   484  0 09:34 pts/8    00:00:00 ps -ef
