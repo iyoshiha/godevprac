@@ -1,0 +1,10 @@
+#! /bin/bash
+
+
+function editconf() {
+	currenttime=$(date "+%s")
+	code conf
+	if [ $cdurrenttime -lt $(date "+%s" conf) ]; then 
+	else 
+	
+}

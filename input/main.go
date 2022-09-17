@@ -6,6 +6,7 @@ import (
 	"os"
 	"flag"
 	"bufio"
+	"io/ioutil"
 	"regexp"
 )
 
@@ -47,24 +48,31 @@ func main() {
 	strs := getValueFromConfig()
 	allInfo := createAllInfo(strs[5:], strs[:5])
 
-	file, err := os.Create("text.txt")
+	file, err := os.Create("resource.properties")
 	defer file.Close()
-
+	if err != nil {
+		log.Fatal(err)
+	}
+	templateByte, err := ioutil.ReadFile("resource.properties.template")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-    _, err = file.WriteString(
-		allInfo.mainJdbc.Dbms +"\n"+
-		allInfo.mainJdbc.Driver+"\n"+
-		allInfo.mainJdbc.Domain+"\n"+
-		allInfo.mainJdbc.Username+"\n"+
-		allInfo.mainJdbc.Password+"\n"+
-		allInfo.subJdbc.Dbms +"\n"+
-		allInfo.subJdbc.Driver+"\n"+
-		allInfo.subJdbc.Domain+"\n"+
-		allInfo.subJdbc.Username+"\n"+
-		allInfo.subJdbc.Password+"\n")
+	templateStr := string(templateByte) 
+
+	templateStr = templateStr +
+	allInfo.mainJdbc.Dbms +"\n"+
+	allInfo.mainJdbc.Driver+"\n"+
+	allInfo.mainJdbc.Domain+"\n"+
+	allInfo.mainJdbc.Username+"\n"+
+	allInfo.mainJdbc.Password+"\n"+
+	allInfo.subJdbc.Dbms +"\n"+
+	allInfo.subJdbc.Driver+"\n"+
+	allInfo.subJdbc.Domain+"\n"+
+	allInfo.subJdbc.Username+"\n"+
+	allInfo.subJdbc.Password+"\n"
+
+	_, err = file.WriteString(templateStr)
 	if err != nil {
 		log.Fatal(err)
 	}
