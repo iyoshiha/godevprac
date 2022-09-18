@@ -10,7 +10,8 @@ import (
 	"regexp"
 )
 
-const targetPath = "a/b/c/d/e/target/"
+const targetPath = "/opt/remix/"
+const resourceProperties = "remix/esm_war/WEB-INF/src/jp/co/softbrain/wes"
 // main jdbc
 const pgDbms =  "DBMS=POSTGRES"
 const pgDriver = "jdbc.driver=org.postgresql.Driver"
