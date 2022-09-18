@@ -58,7 +58,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	templateStr := string(templateByte) 
+	templateStr := string(templateByte)
 
 	templateStr = templateStr +
 	allInfo.mainJdbc.Dbms +"\n"+
@@ -113,7 +113,7 @@ func getValueFromConfig() []string{
 		for _, c :=  range str{
 			if c == '#' {
 				break
-			} 
+			}
 			strSplited := regEqual.Split(str,-1)
 			properties = append(properties, strSplited[1])
 			break
@@ -259,7 +259,7 @@ func validateDbType(dbType string) {
 func commandLineArgs() (args []string, dbType string){
 	// flagで指定して与えられた値はArgsで参照不可
 	f := flag.String("db", "sqlserver", "sqlserver or postgres")
-	
+
 
 	// これ以降フラグの設定など不可能
 	//　設定する場合、この行より上に書く
