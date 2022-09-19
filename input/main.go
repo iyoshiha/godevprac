@@ -39,6 +39,19 @@ type JdbcInfo struct {
 	Password	string
 }
 
+type confItems struct {
+	repository string
+	branch string
+	dbtype	string
+	domain	string
+	username	string
+	contextName	string
+	password	string
+	subUsername	string
+	subPassword	string
+	dbname	string
+}
+
 
 func main() {
 // dbtype=
@@ -85,8 +98,8 @@ func printAllInfoContents(allInfo AllInfo){
 	fmt.Println(allInfo.subJdbc)
 }
 
-func getValueFromConfig() []string{
-	config, err := os.Open("test_config.properties")
+func getConfVal(filePath string) []string{
+	config, err := os.Open(filePath)
 	var properties []string
 	regEqual := regexp.MustCompile(`=`)
 
@@ -98,14 +111,6 @@ func getValueFromConfig() []string{
 
 
 	scanner := bufio.NewScanner(config)
-
-	// for scanner.Scan() {
-	// 	scanner.Text()
-	// 	firstChar := ""
-	// 	if "#" == firstChar {
-	// 		continue
-	// 	}
-	// }
 
 	// 先頭１文字ががシャープ（コメント）かどうか確認
 	// propertyは、properties sliceに格納
@@ -123,20 +128,33 @@ func getValueFromConfig() []string{
 	return properties
 }
 
-// func setPropaties(dbType string, sub bool) JdbcInfo{
+func getValueFromConfig() []string{
+	config, err := os.Open("test_config.properties")
+	var properties []string
+	regEqual := regexp.MustCompile(`=`)
 
-// 	args, dbType := commandLineArgs()
-// 	validateDbType(dbType)
-// 	if len(args) > 0 {
-// 		log.Fatal("\"-db=\"でDB種類を指定してください")
-// 	}
+	if err != nil {
+		panic(err)
+	}
+	defer config.Close()
 
-// 	strs := getValueFromConfig()
-// 	fmt.Println(strs)
-// 	pathInfo = strs[:5]
-// 	dbinfo = strs[5:]
-	// return jdbcInfo
-// }
+	scanner := bufio.NewScanner(config)
+
+	// 先頭１文字ががシャープ（コメント）かどうか確認
+	// propertyは、properties sliceに格納
+	for str := ""; scanner.Scan(); {
+		str = scanner.Text()
+		for _, c :=  range str{
+			if c == '#' {
+				break
+			}
+			strSplited := regEqual.Split(str,-1)
+			properties = append(properties, strSplited[1])
+			break
+		}
+	}
+	return properties
+}
 
 type PathInfo struct {
 	gitPath string
@@ -154,10 +172,10 @@ func createAllInfo(jdbcStr, pathStr []string) AllInfo{
 
 	var dbms string
 	var driver string
-	var url string 
+	var url string
 	var port string
-	dbName := "" 
-	
+	dbName := ""
+
 	if dbtype := jdbcStr[0]; "pg" == dbtype {
 		dbms = pgDbms
 		driver = pgDriver

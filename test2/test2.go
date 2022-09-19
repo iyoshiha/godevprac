@@ -10,11 +10,35 @@ import(
 
 const remixConfPath="remix.conf"
 
+type bc struct {
+	a string
+	b string
+	c string
+}
+
 func main() {
+	str := " "
+	for _, v := range str{
+		Println("++++++++++++")
+		Println(string(v))
+		Println("++++++++++++")
+	}
+
+}
+
+
+func pracstruct () {
+	abc := bc{a: "a", b:"",}
+	Println("start")
+	Println(len(abc.c))
+	Println(abc.c)
+	Println("end")
+}
+
+func j() {
 	str := strings.TrimSpace("      ")
 	Println(len(str))
 }
-
 func sc() {
 	Println("")
 	regEqual := regexp.MustCompile(`=`)
