@@ -8,6 +8,7 @@ import (
 	"bufio"
 	"io/ioutil"
 	"regexp"
+	"strings"
 )
 
 const targetPath = "/opt/remix/"
@@ -30,6 +31,8 @@ const subsqlDriver = "jdbc.sub.driver=com.microsoft.sqlserver.jdbc.SQLServerDriv
 const subsqlUrl = "jdbc.sub.url=jdbc:sqlserver://"
 const subjdbcName = "jdbc.sub.username="
 const subjdbcPass = "jdbc.sub.password="
+
+const targetPath = "/opt/remix/work/"
 
 type JdbcInfo struct {
 	Dbms		string
@@ -54,11 +57,10 @@ type confItems struct {
 
 
 func main() {
-// dbtype=
-// domain=
-// username=
-// password=
-// contextName=
+	fmt.Println(setConfItems(readConfItems("remix.conf")))
+}
+
+func temporary() {
 	strs := getValueFromConfig()
 	allInfo := createAllInfo(strs[5:], strs[:5])
 
@@ -98,24 +100,22 @@ func printAllInfoContents(allInfo AllInfo){
 	fmt.Println(allInfo.subJdbc)
 }
 
-func getConfVal(filePath string) []string{
-	config, err := os.Open(filePath)
+func readConfItems (filePath string) []string {
+	configFile, err := os.Open(filePath)
 	var properties []string
 	regEqual := regexp.MustCompile(`=`)
 
 	if err != nil {
 		panic(err)
 	}
+	defer configFile.Close()
 
-	defer config.Close()
-
-
-	scanner := bufio.NewScanner(config)
+	scanner := bufio.NewScanner(configFile)
 
 	// 先頭１文字ががシャープ（コメント）かどうか確認
 	// propertyは、properties sliceに格納
 	for str := ""; scanner.Scan(); {
-		str = scanner.Text()
+		str = strings.TrimSpace(scanner.Text())
 		for _, c :=  range str{
 			if c == '#' {
 				break
@@ -128,6 +128,38 @@ func getConfVal(filePath string) []string{
 	return properties
 }
 
+func setConfItems(properties []string) (conf confItems) {
+	subFlag := false
+	conf.repository	= properties[0]
+	conf.branch	= properties[1]
+	conf.dbtype	= properties[2]
+	conf.domain	= properties[3]
+	conf.username	= properties[4]
+	conf.contextName	= properties[5]
+	// ********  optional items ***********
+	conf.password	= getOptionalConf(properties[6], conf.username, subFlag)
+	subFlag = true
+	conf.subUsername	= getOptionalConf(properties[7], conf.username, subFlag)
+	conf.subPassword	= getOptionalConf(properties[8], conf.username, subFlag)
+	subFlag = false
+	conf.dbname	= getOptionalConf(properties[9], conf.username, subFlag)
+
+	return conf
+}
+
+func getOptionalConf(option, username string, subFlag bool) (confVal string){
+	if option != "" {
+		confVal = option
+	} else {
+		confVal = username
+	}
+	if subFlag {
+		confVal += "_sub"
+	}
+	return confVal
+}
+
+// old func  delete later //
 func getValueFromConfig() []string{
 	config, err := os.Open("test_config.properties")
 	var properties []string
@@ -155,6 +187,7 @@ func getValueFromConfig() []string{
 	}
 	return properties
 }
+// old func  delete later //
 
 type PathInfo struct {
 	gitPath string
