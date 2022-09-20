@@ -8,13 +8,14 @@ import (
 	"bufio"
 	"regexp"
 	"strings"
+	"io/ioutil"
 )
-	// "io/ioutil"
 
 const remixPath = "/opt/remix/"
 const confPath= remixPath+"remix.conf"
 const targetPath = remixPath+"work/"
 const templatePath = remixPath+"template/"
+const resourcePropertiesTemplateFile = templatePath+"resource.properties.template"
 const resourceProperties = "remix/esm_war/WEB-INF/src/jp/co/softbrain/wes/"
 // main jdbc
 const pgDbms =  "DBMS=POSTGRES"
@@ -61,7 +62,8 @@ type confItems struct {
 
 
 func main() {
-	fmt.Println(createAllInfo(setConfItems(readConfItems(confPath))))
+	allInfo := createAllInfo(setConfItems(readConfItems(confPath)))
+	fmt.Println(writeRecourceProperties(allInfo))
 }
 
 /*
@@ -159,40 +161,32 @@ func getOptionalConf(option, username string, subFlag bool) (confVal string){
 	return confVal
 }
 
-// old func  delete later //
-func getValueFromConfig() []string{
-	config, err := os.Open("test_config.properties")
-	var properties []string
-	regEqual := regexp.MustCompile(`=`)
-
+func writeRecourceProperties(allInfo AllInfo) string{
+	templateByte, err := ioutil.ReadFile(resourcePropertiesTemplateFile)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
-	defer config.Close()
 
-	scanner := bufio.NewScanner(config)
+	templateStr := string(templateByte)
 
-	// 先頭１文字ががシャープ（コメント）かどうか確認
-	// propertyは、properties sliceに格納
-	for str := ""; scanner.Scan(); {
-		str = scanner.Text()
-		for _, c :=  range str{
-			if c == '#' {
-				break
-			}
-			strSplited := regEqual.Split(str,-1)
-			properties = append(properties, strSplited[1])
-			break
-		}
-	}
-	return properties
-}
-// old func  delete later //
+	templateStr = allInfo.mainJdbc.Dbms +"\n"+
+	allInfo.mainJdbc.Driver+"\n"+
+	allInfo.mainJdbc.Domain+"\n"+
+	allInfo.mainJdbc.Username+"\n"+
+	allInfo.mainJdbc.Password+"\n"+
+	allInfo.subJdbc.Dbms +"\n"+
+	allInfo.subJdbc.Driver+"\n"+
+	allInfo.subJdbc.Domain+"\n"+
+	allInfo.subJdbc.Username+"\n"+
+	allInfo.subJdbc.Password+"\n"+
+	templateStr
 
-type PathInfo struct {
-	gitPath string
-	wesPath string
-	esm_log string
+//	_, err = file.WriteString(templateStr)
+//	if err != nil {
+//		log.Fatal(err)
+//	}
+
+	return templateStr
 }
 
 type AllInfo struct {
