@@ -1,0 +1,10 @@
+{{DBMS=POSTGRES
+jdbc.driver=org.postgresql.Driver
+jdbc.url=jdbc:postgresql://sys-ap-linux:5432/esm
+jdbc.username=cust_esm
+jdbc.password=cust_esm}
+{DBMS.sub=POSTGRES
+jdbc.sub.driver=org.postgresql.Driver
+jdbc.sub.url=jdbc:postgresql://sys-ap-linux:5432/esm
+jdbc.sub.username=cust_esm_sub
+jdbc.sub.password=cust_esm_sub}}

@@ -6,15 +6,12 @@ import (
 	"os"
 	"flag"
 	"bufio"
+	"io/ioutil"
 	"regexp"
 	"strings"
 )
-	// "io/ioutil"
 
-const remixPath = "/opt/remix/"
-const confPath= remixPath+"remix.conf"
-const targetPath = remixPath+"work/"
-const templatePath = remixPath+"template/"
+const targetPath = "/opt/remix/"
 const resourceProperties = "remix/esm_war/WEB-INF/src/jp/co/softbrain/wes/"
 // main jdbc
 const pgDbms =  "DBMS=POSTGRES"
@@ -25,8 +22,6 @@ const sqlDriver = "jdbc.driver=com.microsoft.sqlserver.jdbc.SQLServerDriver"
 const sqlUrl = "jdbc.url=jdbc:sqlserver://"
 const jdbcName = "jdbc.username="
 const jdbcPass = "jdbc.password="
-const pgPort = "5432"
-const sqlPort = "1433"
 // sub jdbc
 const subpgDbms =  "DBMS.sub=POSTGRES"
 const subpgDriver = "jdbc.sub.driver=org.postgresql.Driver"
@@ -37,6 +32,7 @@ const subsqlUrl = "jdbc.sub.url=jdbc:sqlserver://"
 const subjdbcName = "jdbc.sub.username="
 const subjdbcPass = "jdbc.sub.password="
 
+const targetPath = "/opt/remix/work/"
 
 type JdbcInfo struct {
 	Dbms		string
@@ -61,20 +57,19 @@ type confItems struct {
 
 
 func main() {
-	fmt.Println(createAllInfo(setConfItems(readConfItems(confPath))))
+	fmt.Println(setConfItems(readConfItems("remix.conf")))
 }
 
-/*
 func temporary() {
 	strs := getValueFromConfig()
 	allInfo := createAllInfo(strs[5:], strs[:5])
 
-	file, err := os.Create(targetPath+"resource.properties")
+	file, err := os.Create("resource.properties")
 	defer file.Close()
 	if err != nil {
 		log.Fatal(err)
 	}
-	templateByte, err := ioutil.ReadFile(templatePath+"resource.properties.template")
+	templateByte, err := ioutil.ReadFile("resource.properties.template")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -98,8 +93,13 @@ func temporary() {
 		log.Fatal(err)
 	}
 }
-*/
-// necesary j;lkj;kljkljklj
+
+func printAllInfoContents(allInfo AllInfo){
+	fmt.Println(allInfo.pathInfo)
+	fmt.Println(allInfo.mainJdbc)
+	fmt.Println(allInfo.subJdbc)
+}
+
 func readConfItems (filePath string) []string {
 	configFile, err := os.Open(filePath)
 	var properties []string
@@ -198,9 +198,10 @@ type PathInfo struct {
 type AllInfo struct {
 	mainJdbc JdbcInfo
 	subJdbc JdbcInfo
+	pathInfo PathInfo
 }
 
-func createAllInfo(conf confItems) AllInfo{
+func createAllInfo(jdbcStr, pathStr []string) AllInfo{
 
 	var dbms string
 	var driver string
@@ -208,51 +209,54 @@ func createAllInfo(conf confItems) AllInfo{
 	var port string
 	dbName := ""
 
-	// main jdbc info is being filled
-	if dbtype := conf.dbtype; "pg" == dbtype {
+	if dbtype := jdbcStr[0]; "pg" == dbtype {
 		dbms = pgDbms
 		driver = pgDriver
-		url = pgUrl
-		dbName = "/" + conf.dbname
-		port = pgPort
+		url = pgUrl+jdbcStr[2]+""
+		dbName = "/" + jdbcStr[2]
+		port = "5432"
 	} else if "sqlserver" == dbtype {
 		dbms = sqlDbms
 		driver = sqlDriver
 		url = sqlUrl
-		port = sqlPort
+		port = "1433" 
 	}
 
 	jdbcInfo := JdbcInfo{
 		Dbms: dbms,
 		Driver: driver,
-		Domain: url+conf.domain+":"+port+dbName,
-		Username: jdbcName + conf.username,
-		Password: jdbcPass + conf.password,
+		Domain: url+jdbcStr[1]+":"+port+dbName, 
+		Username: jdbcName + jdbcStr[2],
+		Password: jdbcPass + jdbcStr[3],
 	}
 
-	// sub jdbc info is being filled
-	if conf.dbtype == "pg"{
+	if dbtype := jdbcStr[0]; "pg" == dbtype {
 		dbms = subpgDbms
 		driver = subpgDriver
-		url = subpgUrl
-		dbName = "/" + conf.dbname
+		url = subpgUrl+jdbcStr[2]+""
+		dbName = "/" + jdbcStr[2]
 		port = "5432"
-	} else if "sqlserver" == conf.dbtype {
+	} else if "sqlserver" == dbtype {
 		dbms = subsqlDbms
 		driver = subsqlDriver
 		url = subsqlUrl
-		port = "1433"
+		port = "1433" 
 	}
 
 	subJdbcInfo := JdbcInfo{
 		Dbms: dbms,
 		Driver: driver,
-		Domain: url+conf.domain+":"+port+dbName,
-		Username: subjdbcName + conf.subUsername,
-		Password: subjdbcPass + conf.subPassword,
+		Domain: url+jdbcStr[1]+":"+port+dbName, 
+		Username: subjdbcName + jdbcStr[2]+"_sub",
+		Password: subjdbcPass + jdbcStr[3]+"_sub",
 	}
 
-	allInfo := AllInfo{jdbcInfo, subJdbcInfo,}
+	pathInfo := PathInfo{
+		gitPath:pathStr[0],
+		wesPath:pathStr[0] + "/repo" + "/remix/esm_war",
+		esm_log:pathStr[4],
+	}
+	allInfo := AllInfo{jdbcInfo, subJdbcInfo, pathInfo}
 	return allInfo
 }
 
