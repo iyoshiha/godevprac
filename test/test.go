@@ -11,7 +11,22 @@ import(
 const remixConfPath="remix.conf"
 
 func main() {
-	Println(getValueFromConfig())
+	a := structFunc()
+	Println(a)
+}
+
+type abc struct {
+	a string
+	b string 
+	c string
+}
+
+func structFunc() (varabc abc) {
+	Println(varabc)
+	varabc.a = "a"
+	varabc.c = "c"
+	Println(varabc)
+	return varabc
 }
 
 func getValueFromConfig() []string{
@@ -32,7 +47,6 @@ func getValueFromConfig() []string{
 	// propertyは、properties sliceに格納
 	for str := ""; scanner.Scan(); {
 		str = strings.TrimSpace(scanner.Text())
-		println(str)
 		for _, c :=  range str{
 			if c == '#' {
 				break
@@ -41,12 +55,13 @@ func getValueFromConfig() []string{
 //				break
 //			}
 			strSplited := regEqual.Split(str,-1)
-		println(strSplited[0])
-		println(strSplited)
+			if len(strSplited) <= 1 {
+				break
+			}
+			Println(len(strSplited))
 			properties = append(properties, strSplited[1])
 			break
 		}
 	}
-	println(len(properties))
 	return properties
 }

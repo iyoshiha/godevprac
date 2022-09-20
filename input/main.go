@@ -32,7 +32,9 @@ const subsqlUrl = "jdbc.sub.url=jdbc:sqlserver://"
 const subjdbcName = "jdbc.sub.username="
 const subjdbcPass = "jdbc.sub.password="
 
-const targetPath = "/opt/remix/work/"
+const remixPath = "/opt/remix/"
+const targetPath = remixPath+"work/"
+const templatePath = remixPath+"template/"
 
 type JdbcInfo struct {
 	Dbms		string
@@ -64,12 +66,12 @@ func temporary() {
 	strs := getValueFromConfig()
 	allInfo := createAllInfo(strs[5:], strs[:5])
 
-	file, err := os.Create("resource.properties")
+	file, err := os.Create(targetPath + "resource.properties")
 	defer file.Close()
 	if err != nil {
 		log.Fatal(err)
 	}
-	templateByte, err := ioutil.ReadFile("resource.properties.template")
+	templateByte, err := ioutil.ReadFile(templatePath+"resource.properties.template")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -93,13 +95,7 @@ func temporary() {
 		log.Fatal(err)
 	}
 }
-
-func printAllInfoContents(allInfo AllInfo){
-	fmt.Println(allInfo.pathInfo)
-	fmt.Println(allInfo.mainJdbc)
-	fmt.Println(allInfo.subJdbc)
-}
-
+// necesary j;lkj;kljkljklj
 func readConfItems (filePath string) []string {
 	configFile, err := os.Open(filePath)
 	var properties []string
@@ -201,7 +197,7 @@ type AllInfo struct {
 	pathInfo PathInfo
 }
 
-func createAllInfo(jdbcStr, pathStr []string) AllInfo{
+func createAllInfo(jdbcStr, pathStr []string, conf confItems) AllInfo{
 
 	var dbms string
 	var driver string
@@ -209,7 +205,18 @@ func createAllInfo(jdbcStr, pathStr []string) AllInfo{
 	var port string
 	dbName := ""
 
-	if dbtype := jdbcStr[0]; "pg" == dbtype {
+	repository string
+	branch string
+	string
+	domain	string
+	username	string
+	contextName	string
+	password	string
+	subUsername	string
+	subPassword	string
+	dbname	string
+
+	if dbtype := conf.dbtype; "pg" == dbtype {
 		dbms = pgDbms
 		driver = pgDriver
 		url = pgUrl+jdbcStr[2]+""
