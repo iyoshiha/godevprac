@@ -5,28 +5,11 @@ import(
 	"regexp"
 	"strings"
 	"os"
-	"log"
 )
 
-const path = "/opt/remix/work/resource.properties"
-
 func main() {
-	b()
-}
-
-func b() {
-	file, err := os.Create(path)
-	if nil != err {
-		log.Fatal(err)
-	}
-	defer file.Close()
-
-	_, err = file.WriteString("this is wrigting\n"+
-	"ok man\r"+
-	"nice work\r\n")
-	if err != nil {
-		log.Fatal(err)
-	}
+	Print(os.Args[1])
+	Print(os.Args[2])
 }
 
 func a() {
