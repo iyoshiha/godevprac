@@ -23,63 +23,63 @@ jdbc.pool.max=10
 jdbc.transaction_isolation=READ_UNCOMMITTED
 
 #Temporary directory path name for file uploading functionality.
-jdbc.upload.temporary=D:/temp/
+jdbc.upload.temporary=C:/esm_log/temp/
 
 #File path for JavaScript. Specify URL.
-resource.path.js=/${contextName}/esales_res/js/
+resource.path.js=/esml/esales_res/js/
 
 #URL for date picker. MUST have cal.html and cal2.html on the same host in case of using IE5.
-resource.path.html=/${contextName}/esales_res/html/
+resource.path.html=/esml/esales_res/html/
 
 #URL for eSohmu images.
-IMG_PATH=/${contextName}/esoumu_res/images/
+IMG_PATH=/esml/esoumu_res/images/
 
 #URL to access the path specified at SCHEDULE_TYPE_IMAGE_UPLOAD_PATH
-SCHEDULE_TYPE_IMAGE_PATH=/${contextName}/esales_res/pict/schedule_icon/
+SCHEDULE_TYPE_IMAGE_PATH=/esml/esales_res/pict/schedule_icon/
 
 #Directory path for icons
-SCHEDULE_TYPE_IMAGE_UPLOAD_PATH=${contextFilePath}/esales_res/pict/schedule_icon/
+SCHEDULE_TYPE_IMAGE_UPLOAD_PATH=C:/User/ito-yo/git/cust_dengyo_R1234/remix/esm_war/esales_res/pict/schedule_icon/
 
 #Blank page for pop-up screens.
 #To display pop-up screens need to have a blank page.
-popup.blankpage.uri=/${contextName}/esales_res/html/dummy.html
+popup.blankpage.uri=/esml/esales_res/html/dummy.html
 
 #Path for log files for PC version.
 #Without this setting, no log files output.
-resource.path.log=D:/esm_log/operation/operationPC.log
+resource.path.log=C:/esm_log/operation/operationPC.log
 
 #Path for log files for mobile version.
 #Without this setting, no log files output.
-resource.path.esm_i.log=D:/esm_log/operation/operationBP.log
+resource.path.esm_i.log=C:/esm_log/operation/operationBP.log
 
 #Path for access log files. 
 #No value no access log is default. 
 #In case of invalid path specified, any functionalities using log output like csv download will NOT work.
-accesslog.path.log=D:/esm_log/security/security.log
+accesslog.path.log=C:/esm_log/security/security.log
 
 #URL for online help.
-resource.path.help=/${contextName}/esales_res/online-help/
+resource.path.help=/esml/esales_res/online-help/
 
 #Directory path for mail delivery error log files.
-customer_mail_dlv.errlog.filename=D:/esm_log/security/customer_mail_dlv.log
+customer_mail_dlv.errlog.filename=C:/esm_log/security/customer_mail_dlv.log
 
 #Directory path for mail for communication sheet log files.
-lead_import.logfile=D:/esm_log/security/lead_import.log
+lead_import.logfile=C:/esm_log/security/lead_import.log
 
 #Directory path for WebAPIs log files
-webapi_accesslog.path.log=D:/esm_log/webapi/webapi.log
+webapi_accesslog.path.log=C:/esm_log/webapi/webapi.log
 
 #Directory path for css files.
-resource.path.css=/${contextName}/esales_res/css/
+resource.path.css=/esml/esales_res/css/
 
 #Directory path for Plugin files.
-resource.path.plugin=/${contextName}/esales_res/original_plugins/
+resource.path.plugin=/esml/esales_res/original_plugins/
 
 #Directory path for esales_res
-resource.path=${contextFilePath}/esales_res/
+resource.path=C:/User/ito-yo/git/cust_dengyo_R1234/remix/esm_war/esales_res/
 
 #Directory path for user manual about Analyzer functionality. NEED '/' at the end.
-ANALYZER_MANUAL_DIR=${contextFilePath}/esales_res/analyzer/manual/
+ANALYZER_MANUAL_DIR=C:/User/ito-yo/git/cust_dengyo_R1234/remix/esm_war/esales_res/analyzer/manual/
 
 #Processing for Assert level events.
 #terminate: terminating the process
@@ -110,7 +110,7 @@ background.lists_auto_refresh.enable=true
 background.rule_engine.anken_state_check.enable=true
 
 #Directory path for  LDAP sync log files.
-ldap_sync.log_file_path=D:/esm_log/ldap/
+ldap_sync.log_file_path=C:/esm_log/ldap/
 
 #Display settings for SQL exceptions.
 #true: detailed message
@@ -129,7 +129,7 @@ wes_sfa_dataimport.path.log=
 background.holiday_ical_setting.thread.enable=true
 
 #Directory path for vcard to person sheet log files.
-vcard.logfile=D:/esm_log/security/vcard.log
+vcard.logfile=C:/esm_log/security/vcard.log
 
 #Control to starting of thread to regist result of datasource's total to database,
 #and thread to invalidate datasource that saves result to view and has results over limit.
@@ -143,22 +143,22 @@ background.data_source_total.thread.enable=true
 jdbc.connect.timeout=10000
 
 #Path for generate contents.
-resource.path.generate_contents=/${contextName}/esales_res/generate/
+resource.path.generate_contents=/esml/esales_res/generate/
 
 #Path for log files for import/export by the batch.
-cloud_import_export_result.path.log=D:/esm_log/operation/cloud_import_export_result.log
+cloud_import_export_result.path.log=C:/esm_log/operation/cloud_import_export_result.log
 
 #Path for log files for collaboration by the batch.
-file_upload_download.path.log=D:/esm_log/operation/filedispatch.log
+file_upload_download.path.log=C:/esm_log/operation/filedispatch.log
 
 #Path for batch sync client.
-batch_sync_client.path=D:/esm_log/filedispatch.zip
+batch_sync_client.path=C:/esm_log/filedispatch.zip
 
 #Control to starting of thread, for use HTTP Geocoding in background.
 background.geocoding.thread.enable=true
 
 #File path for images. Specify URL.
-resource.path.image=/${contextName}/esales_res/images/
+resource.path.image=/esml/esales_res/images/
 
 #Control to starting of thread, for syncronize google calendar
 #true: run thread
@@ -166,13 +166,13 @@ resource.path.image=/${contextName}/esales_res/images/
 background.sync_google_calendar.thread.enable=true
 
 #Path for log files for sync google calendar
-google_calendar_sync.path.log=D:/esm_log/operation/sync_google_calendar.log
+google_calendar_sync.path.log=C:/esm_log/operation/sync_google_calendar.log
 
 #Path for log files for backup google calendar
-google_calendar_backup.path.log=D:/esm_log/operation/bck_google_calendar.log
+google_calendar_backup.path.log=C:/esm_log/operation/bck_google_calendar.log
 
 #Temporary directory path name for file serialize google calendar backup
-google_calendar_backup.temporary=D:/temp/googlebackup/
+google_calendar_backup.temporary=C:/esm_log/temp/googlebackup/
 
 #For the thread of BizcardDelete system status
 #true: valid
@@ -184,10 +184,10 @@ background.bizcard.delete_state_check.enable=true
 background.bizcard.recieve_card.enable=true
 
 #URL to access the path specified at WILL_IMAGE_UPLOAD_PATH
-WILL_IMAGE_UPLOAD_PATH=${contextFilePath}/esales_res/pict/will_icon/
+WILL_IMAGE_UPLOAD_PATH=C:/User/ito-yo/git/cust_dengyo_R1234/remix/esm_war/esales_res/pict/will_icon/
 
 #URL to access the path specified at WILL_IMAGE_PATH
-WILL_IMAGE_PATH=/${contextName}/esales_res/pict/will_icon/
+WILL_IMAGE_PATH=/esml/esales_res/pict/will_icon/
 
 #For the thread of TimelinedDelete system status
 #true: valid
@@ -227,7 +227,7 @@ jdbc.sub.pool.max=10
 jdbc.sub.transaction_isolation=READ_UNCOMMITTED
 
 #Directory path for css default theme files.
-resource.path.css.default=/${contextName}/esales_res/css/default/
+resource.path.css.default=/esml/esales_res/css/default/
 
 #Timeout[ms] for connecting DB Server.
 #Default is no value.
@@ -248,7 +248,7 @@ jdbc.analytics.url=jdbc:sqlserver://localhost:1433;databaseName=esm_analytics
 jdbc.analytics.username=esm_analytics
 
 #Analytics Batch Path
-analytics_batch_path=${contextFilePath}/WEB-INF/classes/jp/co/softbrain/tools/analytics/
+analytics_batch_path=C:/User/ito-yo/git/cust_dengyo_R1234/remix/esm_war/WEB-INF/classes/jp/co/softbrain/tools/analytics/
 
 #Analytics Server Machine Login User
 analytics_user=administrator
@@ -268,7 +268,7 @@ analytics.server_admin.password=
 analytics.account_sync.thread.enable=true
 
 #Path for log files for analytics account sync
-analytics_account_sync.path.log=D:/esm_log/operation/analytics_account_sync.log
+analytics_account_sync.path.log=C:/esm_log/operation/analytics_account_sync.log
 
 #Contorol to use session management
 #true : HttpSession serialize to sub database
@@ -295,16 +295,16 @@ elasticsearch.storage.magnification=0.25
 
 #Path for invit-user's log files for PC version.
 #Without this setting, no log files output.
-resource.path.invit_log=D:/esm_log/operation/operationInvitPC.log
+resource.path.invit_log=C:/esm_log/operation/operationInvitPC.log
 
 #Path for invit-user's log files for BP version.
 #Without this setting, no log files output.
-resource.path.esm_i.invit_log=D:/esm_log/operation/operationInvitBP.log
+resource.path.esm_i.invit_log=C:/esm_log/operation/operationInvitBP.log
 
 #Path for invit-user's access log files. 
 #No value no access log is default. 
 #In case of invalid path specified, any functionalities using log output like csv download will NOT work.
-accesslog.invit.path.log=D:/esm_log/security/securityInvit.log
+accesslog.invit.path.log=C:/esm_log/security/securityInvit.log
 
 #Control to starting of thread, for anken product activate thread
 #true: valid
@@ -312,7 +312,7 @@ accesslog.invit.path.log=D:/esm_log/security/securityInvit.log
 anken_product_activate_thread_enable=true
 
 #file path for AwpAPIs log files
-awp.accesslog.path.log=D:/esm_log/rest/awp.log
+awp.accesslog.path.log=C:/esm_log/rest/awp.log
 
 #Control to starting of thread, for Job Check thread
 #true: valid
@@ -320,7 +320,7 @@ awp.accesslog.path.log=D:/esm_log/rest/awp.log
 background.job_total.thread.enable=true
 
 #file path for Job log files
-job.path.log=D:/esm_log/job/job.log
+job.path.log=C:/esm_log/job/job.log
 
 #Analytics Forign Data Wrapper Database name(PostgresSQL Only)
 jdbc.analytics.fdw.url=jdbc:postgresql://localhost:5432/esm_analytics_fdw
@@ -332,7 +332,7 @@ jdbc.analytics.fdw.username=esm_analytics_fdw
 jdbc.analytics.fdw.password=esm_analytics_fdw
 
 #Path for log files for analytics QS account sync
-analytics_qs_account_sync.path.log=D:/esm_log/operation/analytics_qs_account_sync.log
+analytics_qs_account_sync.path.log=C:/esm_log/operation/analytics_qs_account_sync.log
 
 #Database name from QuickSight DataSource?@
 #When entering the Aurora URL, enter the RDS reading cluster Endpoint, not the pgpool url.
@@ -349,6 +349,6 @@ sp_ps_simple_search.data_sync.thread.enable=false
 sp_ank_simple_search.data_sync.thread.enable=false
 
 #Specify the output file path for Webhook log
-webhook.accesslog.path.log=D:/esm_log/webapi/webhook.log
+webhook.accesslog.path.log=C:/esm_log/webapi/webhook.log
 
 

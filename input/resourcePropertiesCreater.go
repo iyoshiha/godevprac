@@ -1,5 +1,6 @@
 package main
 
+// args 1:esmlog 2:gitpath
 import (
 	"fmt"
 	"log"
@@ -15,8 +16,12 @@ const remixPath = "/opt/remix/"
 const confPath= remixPath+"remix.conf"
 const targetPath = remixPath+"work/"
 const templatePath = remixPath+"template/"
+const esmWarPath = "remix/esm_war/"
+const resourcePropertiesInTargetPath = targetPath+"resource.properties"
 const resourcePropertiesTemplateFile = templatePath+"resource.properties.template"
-const resourceProperties = "remix/esm_war/WEB-INF/src/jp/co/softbrain/wes/"
+const resourcePropertiesPath = "remix/esm_war/WEB-INF/src/jp/co/softbrain/wes/"
+var confValues = setConfItems(readConfItems(confPath))
+
 // main jdbc
 const pgDbms =  "DBMS=POSTGRES"
 const pgDriver = "jdbc.driver=org.postgresql.Driver"
@@ -37,7 +42,6 @@ const subsqlDriver = "jdbc.sub.driver=com.microsoft.sqlserver.jdbc.SQLServerDriv
 const subsqlUrl = "jdbc.sub.url=jdbc:sqlserver://"
 const subjdbcName = "jdbc.sub.username="
 const subjdbcPass = "jdbc.sub.password="
-
 
 type JdbcInfo struct {
 	Dbms		string
@@ -60,10 +64,21 @@ type confItems struct {
 	dbname	string
 }
 
+type PathFromCommandLine struct {
+	esmLogPath string
+	gitPath string
+}
 
 func main() {
-	allInfo := createAllInfo(setConfItems(readConfItems(confPath)))
-	fmt.Println(writeRecourceProperties(allInfo))
+	conf := setConfItems(readConfItems(confPath))
+	allInfo := createAllInfo(conf)
+	writeResourceProperties(allInfo)
+}
+
+func setPathFromCommandLine() (paths PathFromCommandLine){
+	paths.esmLogPath = os.Args[1]
+	paths.gitPath = os.Args[2]
+	return paths
 }
 
 /*
@@ -161,7 +176,26 @@ func getOptionalConf(option, username string, subFlag bool) (confVal string){
 	return confVal
 }
 
-func writeRecourceProperties(allInfo AllInfo) string{
+func replaceContext(templateStr, repositoryName string) string{
+	paths := setPathFromCommandLine()
+
+	esmLogPath := paths.esmLogPath
+	// templateStr = strings.ReplaceAll(templateStr, "\r", "")
+	templateStr = strings.ReplaceAll(templateStr, "${contextName}",confValues.contextName)
+	templateStr = strings.ReplaceAll(templateStr, "${contextFilePath}/", paths.gitPath + repositoryName + "/" + esmWarPath)
+	templateStr = strings.ReplaceAll(templateStr, "D:/esm_log/", esmLogPath)
+	templateStr = strings.ReplaceAll(templateStr, "D:/temp/", esmLogPath + "temp/")
+
+	return templateStr
+}
+
+func writeResourceProperties(allInfo AllInfo ) {
+	file, err := os.Create(resourcePropertiesInTargetPath)
+	if nil != err {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
 	templateByte, err := ioutil.ReadFile(resourcePropertiesTemplateFile)
 	if err != nil {
 		log.Fatal(err)
@@ -169,29 +203,31 @@ func writeRecourceProperties(allInfo AllInfo) string{
 
 	templateStr := string(templateByte)
 
-	templateStr = allInfo.mainJdbc.Dbms +"\n"+
-	allInfo.mainJdbc.Driver+"\n"+
-	allInfo.mainJdbc.Domain+"\n"+
-	allInfo.mainJdbc.Username+"\n"+
-	allInfo.mainJdbc.Password+"\n"+
-	allInfo.subJdbc.Dbms +"\n"+
-	allInfo.subJdbc.Driver+"\n"+
-	allInfo.subJdbc.Domain+"\n"+
-	allInfo.subJdbc.Username+"\n"+
-	allInfo.subJdbc.Password+"\n"+
+	// tikan syori
+	templateStr = replaceContext(templateStr, allInfo.repository)
+
+	templateStr = allInfo.mainJdbc.Dbms +"\r\n"+
+	allInfo.mainJdbc.Driver+"\r\n"+
+	allInfo.mainJdbc.Domain+"\r\n"+
+	allInfo.mainJdbc.Username+"\r\n"+
+	allInfo.mainJdbc.Password+"\r\n"+
+	allInfo.subJdbc.Dbms +"\r\n"+
+	allInfo.subJdbc.Driver+"\r\n"+
+	allInfo.subJdbc.Domain+"\r\n"+
+	allInfo.subJdbc.Username+"\r\n"+
+	allInfo.subJdbc.Password+"\r\n"+
 	templateStr
 
-//	_, err = file.WriteString(templateStr)
-//	if err != nil {
-//		log.Fatal(err)
-//	}
-
-	return templateStr
+	_, err = file.WriteString(templateStr)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 type AllInfo struct {
 	mainJdbc JdbcInfo
 	subJdbc JdbcInfo
+	repository string
 }
 
 func createAllInfo(conf confItems) AllInfo{
@@ -230,12 +266,12 @@ func createAllInfo(conf confItems) AllInfo{
 		driver = subpgDriver
 		url = subpgUrl
 		dbName = "/" + conf.dbname
-		port = "5432"
+		port = pgPort
 	} else if "sqlserver" == conf.dbtype {
 		dbms = subsqlDbms
 		driver = subsqlDriver
 		url = subsqlUrl
-		port = "1433"
+		port = sqlPort
 	}
 
 	subJdbcInfo := JdbcInfo{
@@ -246,7 +282,7 @@ func createAllInfo(conf confItems) AllInfo{
 		Password: subjdbcPass + conf.subPassword,
 	}
 
-	allInfo := AllInfo{jdbcInfo, subJdbcInfo,}
+	allInfo := AllInfo{jdbcInfo, subJdbcInfo, conf.repository}
 	return allInfo
 }
 
@@ -257,34 +293,6 @@ func validateAll() {
 	if len(args) > 0 {
 		log.Fatal("\"-db=\"でDB種類を指定してください")
 	}
-
-}
-
-
-
-func createAndWriteEmptyfile() {
-	file, err := os.Create("empty.txt")
-
-	defer file.Close()
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println(file)
-	fmt.Println("file created")
-
-
-    words := []string{"sky", "falcon", "rock", "hawk"}
-
-    for _, word := range words {
-
-        _, err := file.WriteString(word + "\n")
-
-        if err != nil {
-            log.Fatal(err)
-        }
-    }
 
 }
 
@@ -311,19 +319,4 @@ func commandLineArgs() (args []string, dbType string){
 	dbType = *f
 	fmt.Println("選択されたDBの種類:", dbType)
 	return args, dbType
-}
-
-
-func late() {
-	defer fmt.Println("defer")
-	fmt.Println("late is called")
-}
-func secondLate() {
-	defer fmt.Println("second defer")
-	fmt.Println("second late is called")
-}
-
-func writeFile(contents []string) {
-
-
 }
