@@ -310,7 +310,6 @@ func commandLineArgs() (args []string, dbType string){
 	// flagで指定して与えられた値はArgsで参照不可
 	f := flag.String("db", "sqlserver", "sqlserver or postgres")
 
-
 	// これ以降フラグの設定など不可能
 	//　設定する場合、この行より上に書く
 	flag.Parse()

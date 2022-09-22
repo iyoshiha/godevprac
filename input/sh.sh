@@ -1,3 +1,3 @@
 #! /bin/bash
 
-echo $#
+echo $# $3 $2 $1
