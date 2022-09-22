@@ -1,4 +1,0 @@
-#! /bin/bash
-
-git config --global user.email "ito-yo@softbrain.co.jp"
-git config --global user.name "ito-yo"
